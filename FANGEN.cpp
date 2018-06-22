@@ -4,86 +4,113 @@ using namespace std;
 
 class Wiatrak
 {
+    protected:
+        int r;
     public:
-        Wiatrak(int x=0, int y=0)
-        {
-            rysuj(x,y);
-        }
-        void rysuj(int x, int y);
+        virtual void rysuj()=0;
 };
 
-void Wiatrak::rysuj(int x, int y)
+class Lewy : public Wiatrak
 {
-    char T[100][100];
-    for(int i=0;i<2*y;i++)
-    {
-        for(int j=0;j<2*y;j++)
+    public:
+        Lewy(int x)
         {
-            T[i][j]='.';
+            r=x;
         }
-    }
-    if(x>0)
-    {
-        for(int i=0,k=0;i<y;i++,k++)
+        virtual void rysuj()
         {
-            T[y-k-1][y-k-1]='*';
-            for(int j=1;j+k<y;j++)
+            char T[100][100];
+            for(int i=0;i<2*r;i++)
             {
-                T[y-k-1][y-k-1-j]='*';
+                for(int j=0;j<2*r;j++)
+                {
+                    T[i][j]='.';
+                }
             }
-            T[y-k-1][y+k]='*';
-            for(int j=1;j+k<y;j++)
+            for(int i=0,k=0;i<r;i++,k++)
             {
-                T[y-k-1-j][y+k]='*';
+                T[r-k-1][r-k-1]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r-k-1][r-k-1-j]='*';
+                }
+                T[r-k-1][r+k]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r-k-1-j][r+k]='*';
+                }
+                T[r+k][r-k-1]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r+k+j][r-k-1]='*';
+                }
+                T[r+k][r+k]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r+k][r+k+j]='*';
+                }
             }
-            T[y+k][y-k-1]='*';
-            for(int j=1;j+k<y;j++)
+            for(int i=0;i<2*r;i++)
             {
-                T[y+k+j][y-k-1]='*';
-            }
-            T[y+k][y+k]='*';
-            for(int j=1;j+k<y;j++)
-            {
-                T[y+k][y+k+j]='*';
-            }
-        }
-    }
-    if(x<0)
-    {
-        for(int i=0,k=0;i<y;i++,k++)
-        {
-            T[y-k-1][y-k-1]='*';
-            for(int j=1;j+k<y;j++)
-            {
-                T[y-k-1-j][y-k-1]='*';
-            }
-            T[y-k-1][y+k]='*';
-            for(int j=1;j+k<y;j++)
-            {
-                T[y-k-1][y+k+j]='*';
-            }
-            T[y+k][y-k-1]='*';
-            for(int j=1;j+k<y;j++)
-            {
-                T[y+k][y-k-1-j]='*';
-            }
-            T[y+k][y+k]='*';
-            for(int j=1;j+k<y;j++)
-            {
-                T[y+k+j][y+k]='*';
+                for(int j=0;j<2*r;j++)
+                {
+                    cout<<T[i][j];
+                }
+                cout<<endl;
             }
         }
-    }
+};
 
-    for(int i=0;i<2*y;i++)
-    {
-        for(int j=0;j<2*y;j++)
+class Prawy : public Wiatrak
+{
+    public:
+        Prawy(int x)
         {
-            cout<<T[i][j];
+            r=x;
         }
-        cout<<endl;
-    }
-}
+        virtual void rysuj()
+        {
+            char T[100][100];
+            for(int i=0;i<2*r;i++)
+            {
+                for(int j=0;j<2*r;j++)
+                {
+                    T[i][j]='.';
+                }
+            }
+            for(int i=0,k=0;i<r;i++,k++)
+            {
+                T[r-k-1][r-k-1]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r-k-1-j][r-k-1]='*';
+                }
+                T[r-k-1][r+k]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r-k-1][r+k+j]='*';
+                }
+                T[r+k][r-k-1]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r+k][r-k-1-j]='*';
+                }
+                T[r+k][r+k]='*';
+                for(int j=1;j+k<r;j++)
+                {
+                    T[r+k+j][r+k]='*';
+                }
+            }
+            for(int i=0;i<2*r;i++)
+            {
+                for(int j=0;j<2*r;j++)
+                {
+                    cout<<T[i][j];
+                }
+                cout<<endl;
+            }
+        }
+};
 
 int main()
 {
@@ -91,9 +118,19 @@ int main()
     while(true)
     {
         cin>>r;
-        if(r==0) break;
-        if (r>0) Wiatrak obj(r,r);
-        if (r<0) Wiatrak obj(r,-r);
+        if (r>0)
+        {
+            Lewy obj(r);
+            Wiatrak *wsk = &obj;
+            wsk->rysuj();
+        }
+        else if (r<0)
+        {
+            Prawy obj(-r);
+            Wiatrak *wsk = &obj;
+            wsk->rysuj();
+        }
+        else break;
     }
     return 0;
 }
